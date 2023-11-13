@@ -1,5 +1,6 @@
 package com.example.springtest.restservice;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
@@ -17,6 +18,16 @@ public class GreetingController {
     @GetMapping("/greeting")
     public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
         Executor executor = Executors.newFixedThreadPool(30);
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                for(int i = 0; i < 100; i++) {
+                    System.out.println("Hello world!");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, executor);
 
         return new Greeting(counter.incrementAndGet(), String.format(template, name));
     }
