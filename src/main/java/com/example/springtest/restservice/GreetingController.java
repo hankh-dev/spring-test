@@ -22,7 +22,6 @@ public class GreetingController {
     @GetMapping("/greeting")
     public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
         System.out.println("GET /greeting, port: " + port);
-        Executor executor = Executors.newSingleThreadExecutor();
         CompletableFuture.runAsync(() -> {
             try {
                 for(int i = 0; i < 100; i++) {
@@ -31,7 +30,7 @@ public class GreetingController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, executor);
+        });
 
         return new Greeting(counter.incrementAndGet(), String.format(template, name));
     }
